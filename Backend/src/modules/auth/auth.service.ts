@@ -393,6 +393,10 @@ export const authService = {
         is_email_verified: 1,
       });
       user = await db.select("users", "*", "id = ?", [insertId]);
+      
+      if (!user) {
+        throw AppError.internal("Failed to retrieve created user");
+      }
     } else if (!user.is_email_verified) {
       // Set to verified if they weren't before
       await db.update("users", { is_email_verified: 1 }, "id = ?", [user.id]);
