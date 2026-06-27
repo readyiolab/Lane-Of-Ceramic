@@ -386,15 +386,18 @@ export const authService = {
       // Create full name from email prefix
       const fullName = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ') || "User";
 
-      const insertId = await db.insert("users", {
+      const userId = generateUUID();
+
+      await db.insert("users", {
+        id: userId,
         email: normalizedEmail,
         passwordHash,
         fullName: fullName.trim(),
-        role: "CUSTOMER",
+        role: "USER",
         isActive: 1,
         is_email_verified: 1,
       });
-      user = await db.select("users", "*", "id = ?", [insertId]);
+      user = await db.select("users", "*", "id = ?", [userId]);
       
       if (!user) {
         throw AppError.internal("Failed to retrieve created user");
