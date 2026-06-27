@@ -173,7 +173,8 @@ export async function cacheDel(...keys: string[]): Promise<void> {
 /** Helper: delete all keys matching pattern */
 export async function cacheInvalidatePattern(pattern: string): Promise<void> {
   try {
-    const stream = redis.scanStream({ match: pattern, count: 100 });
+    const matchPattern = pattern.startsWith(KEY_PREFIX) ? pattern : `${KEY_PREFIX}${pattern}`;
+    const stream = redis.scanStream({ match: matchPattern, count: 100 });
     const pipeline = redis.pipeline();
     let count = 0;
 
