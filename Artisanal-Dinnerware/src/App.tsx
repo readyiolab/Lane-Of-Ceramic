@@ -11,13 +11,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CookieConsent from "@/components/layout/CookieConsent";
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import OrderConfirmation from "./pages/OrderConfirmation";
-import Orders from "./pages/Orders";
+import Home from "@/pages/Home";
 
 // Lazy-loaded pages — only downloaded when the user navigates to them
 const Drinkware = lazy(() => import("@/pages/Drinkware"));
@@ -26,7 +20,10 @@ const Serveware = lazy(() => import("@/pages/Serveware"));
 const Kitchenware = lazy(() => import("@/pages/Kitchenware"));
 const About = lazy(() => import("@/pages/About"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const BundleBuilder = lazy(() => import("@/pages/BundleBuilder"));
+const Checkout = lazy(() => import("@/pages/Checkout"));
+const Orders = lazy(() => import("@/pages/Orders"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const queryClient = new QueryClient();
@@ -47,13 +44,10 @@ function Router() {
         <main className="flex-1">
           <Switch>
             <Route path="/" component={Home} />
-            <Route path="/products" component={Products} />
-            <Route path="/product/:slug" component={ProductDetail} />
-            <Route path="/cart" component={Cart} />
-            <Route path="/checkout" component={Checkout} />
-            <Route path="/order-confirmation" component={OrderConfirmation} />
-            <Route path="/orders" component={Orders} />
+            <Route path="/product/:id" component={ProductDetail} />
             <Route path="/bundles/:type" component={BundleBuilder} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/orders" component={Orders} />
             <Route path="/drinkware" component={Drinkware} />
             <Route path="/tableware" component={Tableware} />
             <Route path="/serveware" component={Serveware} />
