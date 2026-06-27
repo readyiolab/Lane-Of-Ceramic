@@ -8,6 +8,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { createAddress, AddressPayload } from "@/api/addresses";
 import { createOrder } from "@/api/orders";
+import { addToCart } from "@/api/cart";
 
 const STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -267,6 +268,19 @@ export default function Checkout() {
 
       const addressRes = await createAddress(addressPayload);
       
+      // 1.5 Sync Local Cart to Backend Cart
+      await Promise.all(
+        items.map((item: any) => {
+          const pId = item.product.numericId || parseInt(item.product.id.replace(/\D/g, '')) || 1;
+          return addToCart({
+            productId: pId,
+            quantity: item.quantity,
+          }).catch(err => {
+            console.warn("Failed to sync item to cart", item, err);
+          });
+        })
+      );
+
       // 2. Create Order
       // For now we map any payment method to COD if it's COD, otherwise ONLINE
       const paymentMethod = payment === "cod" ? "COD" : "ONLINE";

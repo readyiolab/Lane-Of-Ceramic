@@ -29,6 +29,7 @@ export function mapApiProduct(p: ApiProduct): Product {
   const images = p.images?.map((i) => i.url) ?? (p.image ? [p.image] : []);
   return {
     id: p.slug || String(p.id),
+    numericId: p.id,
     name: p.name,
     price: p.salePrice ?? p.price,
     originalPrice: p.salePrice ? p.price : undefined,
