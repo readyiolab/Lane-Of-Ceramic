@@ -191,11 +191,10 @@ export const productService = {
       SELECT ${PRODUCT_LIST_COLUMNS},
              c.id as categoryId, c.name as categoryName, c.slug as categorySlug,
              b.id as brandId, b.name as brandName, b.slug as brandSlug,
-             pi.url as imageUrl
+             (SELECT url FROM ec_product_images WHERE product_id = p.id ORDER BY is_primary DESC, position ASC LIMIT 1) as imageUrl
       FROM ec_products p
       LEFT JOIN ec_categories c ON p.category_id = c.id
       LEFT JOIN ec_brands b ON p.brand_id = b.id
-      LEFT JOIN ec_product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE ${whereSQL}
       ORDER BY ${sortSQL}
       LIMIT ${limit} OFFSET ${skip}
@@ -253,9 +252,9 @@ export const productService = {
 
     // Fetch related products (same category, different id)
     const relatedRows = await db.queryAll(`
-      SELECT ${PRODUCT_LIST_COLUMNS}, pi.url as imageUrl
+      SELECT ${PRODUCT_LIST_COLUMNS},
+             (SELECT url FROM ec_product_images WHERE product_id = p.id ORDER BY is_primary DESC, position ASC LIMIT 1) as imageUrl
       FROM ec_products p
-      LEFT JOIN ec_product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE p.category_id = ? AND p.id != ? AND p.deleted_at IS NULL
       ORDER BY p.featured_rank ASC
       LIMIT 8
@@ -302,11 +301,10 @@ export const productService = {
       SELECT ${PRODUCT_LIST_COLUMNS},
              c.id as categoryId, c.name as categoryName, c.slug as categorySlug,
              b.id as brandId, b.name as brandName, b.slug as brandSlug,
-             pi.url as imageUrl
+             (SELECT url FROM ec_product_images WHERE product_id = p.id ORDER BY is_primary DESC, position ASC LIMIT 1) as imageUrl
       FROM ec_products p
       LEFT JOIN ec_categories c ON p.category_id = c.id
       LEFT JOIN ec_brands b ON p.brand_id = b.id
-      LEFT JOIN ec_product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE p.is_featured = TRUE AND p.deleted_at IS NULL AND p.in_stock = TRUE
       ORDER BY p.featured_rank ASC
       LIMIT ${limit}
@@ -330,11 +328,10 @@ export const productService = {
       SELECT ${PRODUCT_LIST_COLUMNS},
              c.id as categoryId, c.name as categoryName, c.slug as categorySlug,
              b.id as brandId, b.name as brandName, b.slug as brandSlug,
-             pi.url as imageUrl
+             (SELECT url FROM ec_product_images WHERE product_id = p.id ORDER BY is_primary DESC, position ASC LIMIT 1) as imageUrl
       FROM ec_products p
       LEFT JOIN ec_categories c ON p.category_id = c.id
       LEFT JOIN ec_brands b ON p.brand_id = b.id
-      LEFT JOIN ec_product_images pi ON p.id = pi.product_id AND pi.is_primary = TRUE
       WHERE p.is_trending = TRUE AND p.deleted_at IS NULL AND p.in_stock = TRUE
       ORDER BY p.review_count DESC
       LIMIT ${limit}
