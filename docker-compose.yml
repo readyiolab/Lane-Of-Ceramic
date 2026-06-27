@@ -11,7 +11,20 @@ services:
       - backend
     restart: unless-stopped
 
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laneofceramic
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Jhanvi@123
+      MYSQL_ROOT_PASSWORD: Jhanvi@123
+    volumes:
+      - mysql_data:/var/lib/mysql
+
   backend:
+    depends_on:
+      - db
     build:
       context: ./Backend
       dockerfile: Dockerfile
@@ -23,10 +36,13 @@ services:
       - ./Backend/.env
     environment:
       - NODE_ENV=production
-      - DB_HOST=host.docker.internal
+      - DB_HOST=db
       - DB_USER=admin
       - DB_PASS=Jhanvi@123
       - DB_NAME=laneofceramic
       - DB_PORT=3306
-      - DATABASE_URL=mysql://admin:Jhanvi@123@host.docker.internal:3306/laneofceramic
+      - DATABASE_URL=mysql://admin:Jhanvi@123@db:3306/laneofceramic
     restart: unless-stopped
+
+volumes:
+  mysql_data:
