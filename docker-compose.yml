@@ -15,6 +15,18 @@ services:
       - backend
     restart: unless-stopped
 
+  admin:
+    build:
+      context: ./Admin-Panel
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    networks:
+      - default
+    depends_on:
+      - backend
+    restart: unless-stopped
+
   db:
     image: mysql:8.0
     restart: unless-stopped
