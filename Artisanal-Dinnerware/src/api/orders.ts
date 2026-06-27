@@ -10,11 +10,13 @@ export interface OrderItem {
 
 export interface Order {
   id: number;
-  orderId: string;
+  orderId?: string;
+  orderNumber?: string;
   status: string;
-  total: number;
+  totalAmount: number;
   createdAt: string;
-  items?: OrderItem[];
+  previewItemName?: string;
+  previewItemImage?: string | null;
 }
 
 export async function fetchMyOrders() {
