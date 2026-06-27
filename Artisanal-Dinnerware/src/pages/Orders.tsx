@@ -80,7 +80,7 @@ export default function Orders() {
                   </div>
                   <div>
                     <p className="text-xs text-[#6E6E6E] uppercase font-semibold tracking-wide">Total Amount</p>
-                    <p className="text-sm font-bold text-[#3E3A06]">₹{order.total.toLocaleString('en-IN')}</p>
+                    <p className="text-sm font-bold text-[#3E3A06]">₹{order.totalAmount?.toLocaleString('en-IN')}</p>
                   </div>
                   <div>
                     <span className={`inline-flex items-center px-2.5 py-1 text-xs font-bold uppercase tracking-wider border ${getStatusColor(order.status)}`}>
@@ -91,26 +91,19 @@ export default function Orders() {
                 </div>
                 
                 <div className="p-4 sm:p-6 space-y-4">
-                  {order.items?.map((item) => (
-                    <div key={item.id} className="flex items-center gap-4">
-                      {item.image ? (
-                         <img src={item.image} alt={item.productName} className="w-16 h-16 object-cover border border-[#6B6A2A]/20" />
+                    <div className="flex items-center gap-4">
+                      {order.previewItemImage ? (
+                         <img src={order.previewItemImage} alt={order.previewItemName} className="w-16 h-16 object-cover border border-[#6B6A2A]/20" />
                       ) : (
                          <div className="w-16 h-16 bg-[#D6CBB7] flex items-center justify-center border border-[#6B6A2A]/20">
                            <Package size={20} className="text-[#6B6A2A]/40" />
                          </div>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-bold text-[#1A1A1A] truncate">{item.productName}</p>
-                        <p className="text-xs text-[#6E6E6E] mt-0.5">Qty: {item.quantity}</p>
+                      <div>
+                        <h3 className="font-bold text-[#1A1A1A]">{order.previewItemName}</h3>
+                        <p className="text-sm text-[#6E6E6E]">Order Preview</p>
                       </div>
-                      <p className="text-sm font-bold text-[#3E3A06]">₹{(item.price * item.quantity).toLocaleString('en-IN')}</p>
                     </div>
-                  ))}
-                  
-                  {(!order.items || order.items.length === 0) && (
-                    <p className="text-sm text-[#6E6E6E] italic">Item details not available.</p>
-                  )}
                 </div>
               </div>
             ))}
