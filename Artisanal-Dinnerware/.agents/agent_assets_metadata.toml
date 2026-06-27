@@ -1,0 +1,50 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "mCJxtZ86nXXu5nZPQnanj"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/coffee-mug.png"
+type = "image"
+title = "coffee mug"
+
+[[generated]]
+id = "LbOYWUsjb5Lii3NXEFOCf"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/matcha-cup.png"
+type = "image"
+title = "matcha cup"
+
+[[generated]]
+id = "5XQp7aJykftk7XPMk8e2_"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/latte-mug.png"
+type = "image"
+title = "latte mug"
+
+[[generated]]
+id = "sY0wMP5wG-c-up3SMlVBi"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/dinner-set.png"
+type = "image"
+title = "dinner set"
+
+[[generated]]
+id = "uIxlnbMn_o591_-NZWmk2"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/serving-bowl.png"
+type = "image"
+title = "serving bowl"
+
+[[generated]]
+id = "k8ERBLpePNnhA7wDQk1K8"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/canister-set.png"
+type = "image"
+title = "canister set"
+
+[[generated]]
+id = "T9ROGVAOzipfLkiD3oIdu"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/hero-banner-1.png"
+type = "image"
+title = "home hero"
+
+[[generated]]
+id = "dGj2uFcV5XG6jEOnot8Vd"
+uri = "file://artifacts/lane-of-ceramic/src/assets/images/hero-banner-2.png"
+type = "image"
+title = "home hero 2"

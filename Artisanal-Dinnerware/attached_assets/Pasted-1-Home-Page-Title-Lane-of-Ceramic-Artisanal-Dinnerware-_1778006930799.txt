@@ -1,0 +1,278 @@
+1. Home Page
+
+Title: Lane of Ceramic | Artisanal Dinnerware & Ceramic Home Decor
+
+Description: Discover Lane of Ceramic, your destination for handcrafted ceramic dinner sets, coffee mugs, and tableware. Elevate your home with sustainable stoneware.
+
+Keywords: ceramic, dinnerware sets, handcrafted pottery, Lane of Ceramic, artisanal home decor, stoneware plates.
+
+H2 Tag: Why Choose Handcrafted Ceramic Dinnerware for Your Home?
+
+
+
+
+
+2. Drinkware
+
+Title: Ceramic Coffee Mugs & Tea Cups | Lane of Ceramic
+
+Description: Shop our collection of ceramic coffee mugs, tea cups, and coffee cups. Hand-poured designs that keep your beverages warm and your mornings stylish.
+
+Keywords: coffee mug, tea cups, coffee cups, ceramic mugs, handmade drinkware, stoneware cups.
+
+H2 Tag: Ergonomic and Stylish Ceramic Coffee Cups for the Perfect Brew.
+
+
+
+
+
+3. Tableware
+
+Title: Ceramic Dinner Sets & Dinnerware Sets | Lane of Ceramic
+
+Description: Browse premium ceramic dinnerware sets and dinner plates. Durable, microwave-safe, and artistically crafted for everyday meals and special occasions.
+
+Keywords: dinner set, dinnerware sets, dinner plates, ceramic plates, luxury tableware, stoneware dinner set.
+
+H2 Tag: How to Choose the Best Ceramic Dinnerware Sets for Modern Dining.
+
+
+
+
+
+4. Serveware
+
+Title: Artisan Ceramic Serveware & Platters | Lane of Ceramic
+
+Description: Elegant ceramic serveware for your dining table. Shop handcrafted serving bowls, platters, and trays designed for functional beauty and durability.
+
+Keywords: ceramic serveware, serving bowls, ceramic platters, handmade serving dishes, entertainment tableware.
+
+H2 Tag: Versatile Ceramic Serveware for Hosting and Everyday Use.
+
+
+
+
+
+5. Kitchenware
+
+Title: Ceramic Kitchenware & Storage Jars | Lane of Ceramic
+
+Description: Organize with style using our ceramic kitchenware. Find handmade jars, canisters, and tools that combine traditional craft with modern utility.
+
+Keywords: kitchen ware, ceramic jars, ceramic kitchen tools, handmade canisters, pottery kitchen accessories.
+
+H2 Tag: Durable and Eco-Friendly Ceramic Kitchenware for a Tidy Home.
+
+
+
+
+
+6. About Us
+
+Title: About Us | The Craftsmanship of Lane of Ceramic
+
+Description: Learn the story behind Lane of Ceramic. We create sustainable, artisanal ceramic pieces that bring soul and character to your living space.
+
+Keywords: ceramic studio story, handmade pottery process, artisanal ceramics, Lane of Ceramic brand.
+
+H2 Tag: Our Mission: Bringing Traditional Pottery to Modern Lifestyles.
+
+
+
+
+
+7. Contact Us
+
+Title: Contact Us | Lane of Ceramic Customer Support
+
+Description: Contact Lane of Ceramic for inquiries regarding our dinner sets, custom pottery orders, or wholesale opportunities. We’re here to help you.
+
+Keywords: contact Lane of Ceramic, ceramic studio contact, pottery wholesale India, customer support.
+
+H2 Tag: Get in Touch for Custom Ceramic Orders and Support.
+
+
+
+
+
+8. Privacy Policy
+
+Title: Privacy Policy | Lane of Ceramic Data Protection
+
+Description: Read the Privacy Policy for Lane of Ceramic. Learn how we collect, use, and protect your personal information during your shopping experience.
+
+Keywords: privacy policy, data protection, Lane of Ceramic terms, secure shopping.
+
+H2 Tag: Your Privacy and Data Security at Lane of Ceramic.
+
+
+
+
+
+:root {
+
+  --bg-cream: #D6CBB7;      / Background /
+
+  --olive-dark: #3E3A06;    / Main logo shape /
+
+  --olive-medium: #6B6A2A;  / Lines / accents /
+
+  --text-dark: #1A1A1A;     / Text (Lane of Ceramic) /
+
+  --text-light: #6E6E6E;    / Subtitle text /
+
+}
+
+Privacy Policy
+
+At Lane of Ceramic, we respect your privacy like a good host respects their guests—no unnecessary intrusion, no shady business.
+
+This Privacy Policy explains how we collect, use, and protect your information when you interact with us.
+
+---
+
+1. Information We Collect
+
+When you use our services, we may collect:
+
+* Personal Information: Name, phone number, email address, shipping/billing address
+
+* Payment Details: Processed securely via third-party payment gateways (we do NOT store your card details)
+
+* Order Information: Products purchased, preferences, transaction details
+
+* Technical Data: IP address, browser type, device info, cookies
+
+---
+
+2. How We Use Your Information
+
+We use your information to:
+
+* Process and deliver your orders
+
+* Communicate order updates and customer support
+
+* Improve our products, services, and user experience
+
+* Send promotional offers (only if you opt in—no spam nonsense)
+
+* Prevent fraud and ensure secure transactions
+
+---
+
+3. Sharing of Information
+
+We do not sell your data—we’re in ceramics, not data trafficking.
+
+We may share your data with:
+
+* Logistics partners (for delivery)
+
+* Payment processors (for secure transactions)
+
+* Service providers (website hosting, analytics, etc.)
+
+All partners are required to handle your data responsibly.
+
+---
+
+4. Cookies & Tracking
+
+Our website may use cookies to:
+
+* Enhance browsing experience
+
+* Remember preferences
+
+* Analyze website traffic
+
+You can disable cookies in your browser settings if you prefer.
+
+---
+
+5. Data Security
+
+We take reasonable steps to protect your information from:
+
+* Unauthorized access
+
+* Misuse or disclosure
+
+* Data loss
+
+But let’s be real—no system is 100% hack-proof. Still, we don’t cut corners.
+
+---
+
+6. Your Rights
+
+You have the right to:
+
+* Access your personal data
+
+* Request correction or deletion
+
+* Opt out of marketing communications
+
+To exercise your rights, contact us at the details below.
+
+---
+
+7. Third-Party Links
+
+Our platform may contain links to third-party websites.
+
+We are not responsible for their privacy practices—read their policies before sharing data.
+
+---
+
+8. Updates to This Policy
+
+We may update this Privacy Policy from time to time.
+
+Changes will be posted here with an updated effective date.
+
+---
+
+9. Contact Us
+
+If you have any questions or concerns regarding this Privacy Policy, contact us:
+
+Lane of Ceramic
+
+Email: [your email here]
+
+Phone: [your number here]
+
+---
+
+Effective Date: [Insert Date]
+
+About Us – Lane of Ceramic**
+
+At Lane of Ceramic, we don’t just sell crockery—we curate experiences that sit right at your table.
+
+Born from a simple idea that everyday essentials deserve better design, we bring together timeless craftsmanship and modern aesthetics. From elegant dinnerware and durable hotelware to statement décor pieces that quietly steal attention, everything we offer is built to elevate spaces—homes, cafés, and everything in between.
+
+We believe ceramics should do more than just exist on a shelf. They should tell a story, complement your lifestyle, and occasionally make your guests ask, “Where did you get that?”
+
+Our collections are thoughtfully selected for quality, durability, and style—because good taste isn’t just about food, it’s also about what you serve it on.
+
+Whether you're setting up your dream dining table, upgrading your hospitality space, or just adding a little character to your home, Lane of Ceramic is where function meets finesse.
+
+Because ordinary tableware is boring—and we don’t do boring.
+
+https://www.houseofceramics.in/
+
+see this link ok 
+i want to make same this ecommerce ok 
+
+i want same design 
+with my color this same ok 
+
+make beautful ui enhce it 
+
+use proepr banner caroseul 
+robust ok do that
