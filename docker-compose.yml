@@ -17,14 +17,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     env_file:
       - ./Backend/.env
     environment:
       - NODE_ENV=production
-      - DB_HOST=168.231.122.169
+      - DB_HOST=host.docker.internal
       - DB_USER=admin
       - DB_PASS=Jhanvi@123
       - DB_NAME=laneofceramic
       - DB_PORT=3306
-      - DATABASE_URL=mysql://admin:Jhanvi@123@168.231.122.169:3306/laneofceramic
+      - DATABASE_URL=mysql://admin:Jhanvi@123@host.docker.internal:3306/laneofceramic
     restart: unless-stopped
