@@ -9,14 +9,14 @@ export const PAGINATION = {
 
 /** Cache TTLs (seconds) */
 export const CACHE_TTL = {
-  PRODUCTS_LIST: 300,       // 5 minutes
-  PRODUCT_DETAIL: 600,      // 10 minutes
-  CATEGORIES: 3600,         // 1 hour
-  BRANDS: 3600,             // 1 hour
-  FEATURED_PRODUCTS: 300,   // 5 minutes
-  USER_SESSION: 86_400,     // 24 hours
-  OTP: 600,                 // 10 minutes
-  CART: 1_800,              // 30 minutes
+  PRODUCTS_LIST: 30,          // 30 seconds — fast refresh
+  PRODUCT_DETAIL: 30,         // 30 seconds
+  CATEGORIES: 60,             // 1 minute
+  BRANDS: 60,                 // 1 minute
+  FEATURED_PRODUCTS: 30,      // 30 seconds
+  USER_SESSION: 86_400,       // 24 hours
+  OTP: 600,                   // 10 minutes
+  CART: 1_800,                // 30 minutes
 } as const;
 
 /** Cache key prefixes */

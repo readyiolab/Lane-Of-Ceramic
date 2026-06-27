@@ -1,5 +1,5 @@
 import { db } from "../../database/mysql.js";
-import { cacheGet, cacheSet, cacheInvalidatePattern } from "../../database/redis.js";
+import { cacheGet, cacheSet, cacheClearCatalog } from "../../database/redis.js";
 import { AppError } from "../../common/api-error.js";
 import { slugify, uniqueSlug } from "../../utils/slug.js";
 import { CACHE_TTL, CACHE_KEY } from "../../config/constants.js";
@@ -75,7 +75,7 @@ export const brandService = {
 
     const brand = await db.select("brands", "*", "id = ?", [result.insertId]);
 
-    await cacheInvalidatePattern("brands:*");
+    await cacheClearCatalog();
     log.info({ brandId: Number(result.insertId), name: input.name }, "Brand created");
 
     return mapBrand(brand);
@@ -113,8 +113,7 @@ export const brandService = {
 
     const updated = await db.select("brands", "*", "id = ?", [id]);
 
-    await cacheInvalidatePattern("brands:*");
-    await cacheInvalidatePattern("products:*"); // product detail caching uses brand details
+    await cacheClearCatalog();
     log.info({ brandId: id }, "Brand updated");
 
     return mapBrand(updated);
@@ -135,8 +134,7 @@ export const brandService = {
 
     await db.update("brands", { deleted_at: new Date() }, "id = ?", [id]);
 
-    await cacheInvalidatePattern("brands:*");
-    await cacheInvalidatePattern("products:*");
+    await cacheClearCatalog();
     log.info({ brandId: id }, "Brand deleted");
   },
 };

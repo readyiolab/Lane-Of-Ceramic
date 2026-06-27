@@ -1,5 +1,5 @@
 import { db } from "../../database/mysql.js";
-import { cacheGet, cacheSet, cacheInvalidatePattern } from "../../database/redis.js";
+import { cacheGet, cacheSet, cacheClearCatalog } from "../../database/redis.js";
 import { AppError } from "../../common/api-error.js";
 import { slugify, uniqueSlug } from "../../utils/slug.js";
 import { CACHE_TTL, CACHE_KEY } from "../../config/constants.js";
@@ -149,7 +149,7 @@ export const categoryService = {
 
     const category = await db.select("categories", "*", "id = ?", [result.insertId]);
 
-    await cacheInvalidatePattern("categories:*");
+    await cacheClearCatalog();
     log.info({ categoryId: Number(result.insertId), name: input.name }, "Category created");
 
     return mapCategory(category);
@@ -207,8 +207,7 @@ export const categoryService = {
 
     const updated = await db.select("categories", "*", "id = ?", [id]);
 
-    await cacheInvalidatePattern("categories:*");
-    await cacheInvalidatePattern("products:*"); // product details contain category info
+    await cacheClearCatalog();
     log.info({ categoryId: id }, "Category updated");
 
     return mapCategory(updated);
@@ -235,8 +234,7 @@ export const categoryService = {
 
     await db.update("categories", { deleted_at: new Date() }, "id = ?", [id]);
 
-    await cacheInvalidatePattern("categories:*");
-    await cacheInvalidatePattern("products:*");
+    await cacheClearCatalog();
     log.info({ categoryId: id }, "Category deleted");
   },
 };

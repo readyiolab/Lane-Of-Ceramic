@@ -1,5 +1,5 @@
 import { db } from "../../database/mysql.js";
-import { cacheGet, cacheSet, cacheInvalidatePattern } from "../../database/redis.js";
+import { cacheGet, cacheSet, cacheClearCatalog } from "../../database/redis.js";
 import { AppError } from "../../common/api-error.js";
 import { slugify, uniqueSlug } from "../../utils/slug.js";
 import { parsePagination } from "../../utils/pagination.js";
@@ -383,8 +383,8 @@ export const productService = {
 
     const product = await getProductDetailHelper(result.insertId);
 
-    // Invalidate cache
-    await cacheInvalidatePattern("products:*");
+    // Invalidate ALL catalog cache instantly
+    await cacheClearCatalog();
 
     log.info({ productId: Number(result.insertId), name: input.name }, "Product created");
     return product;
@@ -439,9 +439,8 @@ export const productService = {
 
     const product = await getProductDetailHelper(id);
 
-    // Invalidate cache
-    await cacheInvalidatePattern("products:*");
-    await cacheInvalidatePattern(`product:${existing.slug}`);
+    // Invalidate ALL catalog cache instantly
+    await cacheClearCatalog();
 
     log.info({ productId: id }, "Product updated");
     return product;
@@ -463,8 +462,7 @@ export const productService = {
       [id],
     );
 
-    await cacheInvalidatePattern("products:*");
-    await cacheInvalidatePattern(`product:${product.slug}`);
+    await cacheClearCatalog();
 
     log.info({ productId: id }, "Product soft-deleted");
   },
@@ -481,8 +479,7 @@ export const productService = {
       is_primary: input.isPrimary ? 1 : 0,
       position: input.position ?? 0,
     });
-    await cacheInvalidatePattern("products:*");
-    await cacheInvalidatePattern(`product:${product.slug}`);
+    await cacheClearCatalog();
     
     const img = await db.select("product_images", "*", "id = ?", [result.insertId]);
     return {
@@ -498,8 +495,7 @@ export const productService = {
     const img = await db.select("product_images", "id", "id = ? AND product_id = ?", [imageId, productId]);
     if (!img) throw AppError.notFound("Image");
     await db.delete("product_images", "id = ?", [imageId]);
-    await cacheInvalidatePattern("products:*");
-    if (product) await cacheInvalidatePattern(`product:${product.slug}`);
+    await cacheClearCatalog();
   },
 
   async addVariant(

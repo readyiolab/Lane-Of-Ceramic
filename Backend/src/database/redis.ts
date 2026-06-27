@@ -173,24 +173,37 @@ export async function cacheDel(...keys: string[]): Promise<void> {
 /** Helper: delete all keys matching pattern */
 export async function cacheInvalidatePattern(pattern: string): Promise<void> {
   try {
-    const matchPattern = pattern.startsWith(KEY_PREFIX) ? pattern : `${KEY_PREFIX}${pattern}`;
-    const stream = redis.scanStream({ match: matchPattern, count: 100 });
-    const pipeline = redis.pipeline();
-    let count = 0;
-
-    for await (const keys of stream) {
-      for (const key of keys as string[]) {
-        const stripped = key.startsWith(KEY_PREFIX) ? key.slice(KEY_PREFIX.length) : key;
-        pipeline.del(stripped);
-        count++;
-      }
-    }
-
-    if (count > 0) {
-      await pipeline.exec();
-      log.debug({ pattern, count }, "Cache pattern invalidated");
+    // For ioredis with keyPrefix, scanStream match needs the full prefixed key.
+    // But keyPrefix behavior is inconsistent across commands.
+    // So we use the raw redis.keys() which respects keyPrefix automatically,
+    // then delete each key (also auto-prefixed by ioredis).
+    const fullPattern = pattern.startsWith(KEY_PREFIX) ? pattern : `${KEY_PREFIX}${pattern}`;
+    
+    // Use KEYS command (fine for small key counts typical of app caches)
+    const matchedKeys = await redis.keys(fullPattern);
+    
+    if (matchedKeys.length > 0) {
+      // Keys returned by redis.keys() include the prefix already,
+      // but redis.del() with keyPrefix will auto-add it again.
+      // So we must strip the prefix before passing to del().
+      const stripped = matchedKeys.map((k) =>
+        k.startsWith(KEY_PREFIX) ? k.slice(KEY_PREFIX.length) : k
+      );
+      await redis.del(...stripped);
+      log.debug({ pattern, count: stripped.length }, "Cache pattern invalidated");
     }
   } catch (err) {
     log.error({ pattern, err }, "Cache pattern invalidation error");
   }
+}
+
+/** Helper: clear ALL product and category caches at once. 
+ *  Call this after any admin mutation to ensure instant freshness. */
+export async function cacheClearCatalog(): Promise<void> {
+  await Promise.all([
+    cacheInvalidatePattern("products:*"),
+    cacheInvalidatePattern("product:*"),
+    cacheInvalidatePattern("categories:*"),
+    cacheInvalidatePattern("brands:*"),
+  ]);
 }
