@@ -6,7 +6,7 @@ const FALLBACK = {
   title: "Kitchenware",
   subtitle: "Lane of Ceramic",
   h2: "Functional Ceramic Kitchen Essentials for the Modern Home",
-  heroImage: "https://images.unsplash.com/photo-1493894473891-0f6e7b36b73e?w=1400&auto=format&fit=crop&q=80",
+  heroImage: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=1400&auto=format&fit=crop&q=80",
 };
 
 export default function Kitchenware() {

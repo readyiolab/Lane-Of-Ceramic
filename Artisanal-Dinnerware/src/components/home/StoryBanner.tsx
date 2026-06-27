@@ -6,7 +6,7 @@ export default function StoryBanner() {
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div className="relative">
           <img
-            src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&auto=format&fit=crop&q=80"
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&auto=format&fit=crop&q=80"
             alt="Our craft"
             className="w-full aspect-[4/3] object-cover"
             loading="lazy"

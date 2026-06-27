@@ -41,7 +41,7 @@ const SLIDES = [
     cta: "Shop Kitchenware",
     ctaPath: "/kitchenware",
     bg: "from-[#3E3A06]/80 to-[#6B6A2A]/30",
-    image: "https://images.unsplash.com/photo-1493894473891-0f6e7b36b73e?w=1400&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=1400&auto=format&fit=crop&q=80",
   },
 ];
 

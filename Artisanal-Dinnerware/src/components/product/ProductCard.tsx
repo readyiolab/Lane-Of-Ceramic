@@ -3,6 +3,7 @@ import { ShoppingCart, Check, Star } from "lucide-react";
 import { useLocation } from "wouter";
 import { useCart } from "@/context/CartContext";
 import type { Product } from "@/data/products";
+import { optimizeImage } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
@@ -32,7 +33,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative overflow-hidden aspect-square">
         <img
-          src={product.image}
+          src={optimizeImage(product.image, 400)}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"

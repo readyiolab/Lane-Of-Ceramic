@@ -59,7 +59,8 @@ export function CategoriesPage() {
       })
       return { previous }
     },
-    onError: (_err, _id, context) => {
+    onError: (...args) => {
+      const context = args[2] as any;
       if (context?.previous) {
         queryClient.setQueryData(["categories"], context.previous)
       }

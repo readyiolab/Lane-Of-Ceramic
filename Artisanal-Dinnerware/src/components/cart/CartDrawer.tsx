@@ -1,6 +1,7 @@
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight, Tag, Truck, Gift, Flame, Package } from "lucide-react";
 import { useLocation } from "wouter";
 import { useCart, DISCOUNT_TIERS } from "@/context/CartContext";
+import { optimizeImage } from "@/lib/utils";
 
 const TIER_ICONS = [Package, Truck, Gift, Flame];
 
@@ -141,7 +142,7 @@ export default function CartDrawer() {
                 return (
                   <div key={item.product.id} className="flex gap-3.5 bg-[#D6CBB7] p-3" data-testid={`cart-item-${item.product.id}`}>
                     <div className="relative w-20 h-20 flex-shrink-0">
-                      <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                      <img src={optimizeImage(item.product.image, 150)} alt={item.product.name} className="w-full h-full object-cover" />
                       {isBundle ? (
                         <span className="absolute -top-1 -right-1 bg-[#3E3A06] text-[#D6CBB7] text-[9px] px-1 py-0.5 font-bold">
                           BUNDLE

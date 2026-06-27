@@ -23,7 +23,7 @@ const CATEGORIES = [
   {
     title: "Kitchenware",
     subtitle: "Jars, canisters & kitchen tools",
-    image: "https://images.unsplash.com/photo-1493894473891-0f6e7b36b73e?w=600&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80",
     path: "/kitchenware",
   },
 ];

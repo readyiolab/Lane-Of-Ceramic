@@ -4,14 +4,14 @@ import { ArrowRight, Gift, Star, Flame, Sparkles } from "lucide-react";
 const TRIO_PREVIEWS = [
   "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=120&h=120&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=120&h=120&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=120&h=120&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&h=120&auto=format&fit=crop&q=80",
 ];
 
 const FIVE_PREVIEWS = [
-  "https://images.unsplash.com/photo-1566454825481-9c31ed9a8aae?w=120&h=120&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1493894473891-0f6e7b36b73e?w=120&h=120&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=120&h=120&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=120&h=120&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=120&h=120&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1605618826115-fb9e77c63a8a?w=120&h=120&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=120&h=120&auto=format&fit=crop&q=80",
   "https://images.unsplash.com/photo-1484766280341-87861644c80d?w=120&h=120&auto=format&fit=crop&q=80",
 ];
 

@@ -33,6 +33,9 @@ export function ImageGallery({
     const files = Array.from(e.target.files || [])
     if (!files.length) return
 
+    let currentLocalImages = [...localImages];
+    let didUploadNew = false;
+
     for (const file of files) {
       if (!file.type.startsWith("image/")) {
         toast.error(`${file.name} is not an image file`)
@@ -52,8 +55,9 @@ export function ImageGallery({
           setOptimisticUploads(prev => [...prev, res.url])
           await addProductImage(productId, { url: res.url, isPrimary: images.length === 0 })
         } else if (onImagesChange) {
-          // If creating a new product, pass URLs up to the form state
-          onImagesChange([...localImages, res.url])
+          // If creating a new product, accumulate URLs
+          currentLocalImages.push(res.url)
+          didUploadNew = true;
         }
         
       } catch (err) {
@@ -64,6 +68,10 @@ export function ImageGallery({
     
     setIsUploading(false)
     e.target.value = "" // reset file input
+
+    if (!productId && didUploadNew && onImagesChange) {
+      onImagesChange(currentLocalImages);
+    }
 
     if (productId) {
       // Refresh product data to fetch new images

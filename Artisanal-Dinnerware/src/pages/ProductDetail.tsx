@@ -4,6 +4,7 @@ import { ChevronLeft, ShoppingCart, Check, Star, StarHalf, Shield, Truck, Rotate
 import { useProduct } from "@/hooks/useCatalog";
 import { useCart } from "@/context/CartContext";
 import ProductCard from "@/components/product/ProductCard";
+import { optimizeImage } from "@/lib/utils";
 
 function StarRating({ rating }: { rating: number }) {
   const full = Math.floor(rating);
@@ -91,7 +92,7 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-4">
             <div className="aspect-square overflow-hidden bg-[#E8E0D0]">
               <img
-                src={images[selectedImage]}
+                src={optimizeImage(images[selectedImage], 800)}
                 alt={product.name}
                 className="w-full h-full object-cover"
                 data-testid="img-product-main"
@@ -108,7 +109,7 @@ export default function ProductDetail() {
                     }`}
                     data-testid={`button-thumbnail-${i}`}
                   >
-                    <img src={img} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
+                    <img src={optimizeImage(img, 150)} alt={`${product.name} view ${i + 1}`} className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

@@ -57,7 +57,8 @@ export function ProductsPage() {
       setDeleteId(null)
       return { previous }
     },
-    onError: (_err, _id, context) => {
+    onError: (...args) => {
+      const context = args[2] as any;
       if (context?.previous) {
         queryClient.setQueryData(["products", page, query], context.previous)
       }

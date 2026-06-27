@@ -1,0 +1,12 @@
+# Lane of Ceramic
+Lane of Ceramic is an artisanal ceramic brand offering dinnerware, drinkware, serveware, and kitchenware.
+
+## Structure
+- Home: /
+- Categories: /kitchenware, /tableware, /serveware, /drinkware
+- Bundles: /bundles/trio, /bundles/five
+- About Us: /about
+- Contact: /contact
+
+## API
+Backend API is available under /api/.
