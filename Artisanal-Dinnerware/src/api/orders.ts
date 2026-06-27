@@ -18,7 +18,7 @@ export interface Order {
 }
 
 export async function fetchMyOrders() {
-  return apiFetch<Order[]>("/orders/my-orders");
+  return apiFetch<Order[]>("/orders");
 }
 
 export async function createOrder(payload: any) {
