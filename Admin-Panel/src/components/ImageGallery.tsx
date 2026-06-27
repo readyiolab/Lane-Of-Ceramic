@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Upload, X, Loader2, Star, StarOff } from "lucide-react"
+import { Upload, X, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { uploadImage, addProductImage, deleteProductImage } from "@/api/endpoints"
 import { Button } from "@/components/ui/button"
@@ -84,15 +84,7 @@ export function ImageGallery({
     }
   }
 
-  const setPrimary = async (imageId: number) => {
-     if (!productId) return
-     try {
-       // Since the API might not have a dedicated setPrimary endpoint, 
-       // we can delete and re-add or just leave it for now.
-       // Looking at the schema, it's possible to update it but we only have addProductImage.
-       toast.info("Setting primary image is only supported via backend updates right now.")
-     } catch (err) {}
-  }
+
 
   return (
     <div className="space-y-4">

@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -125,7 +125,7 @@ export function ProductFormPage() {
 
       if (!isEdit && localImages.length > 0 && res.id) {
         await Promise.all(
-          localImages.map((url, i) => 
+          localImages.map((url: string, i: number) => 
             addProductImage(res.id, { url, isPrimary: i === 0 })
           )
         )
