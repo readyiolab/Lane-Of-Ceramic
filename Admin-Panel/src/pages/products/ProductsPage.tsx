@@ -43,12 +43,32 @@ export function ProductsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteProduct,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["products", page, query] })
+      const previous = queryClient.getQueryData(["products", page, query])
+      queryClient.setQueryData(["products", page, query], (old: any) => {
+        if (!old?.data) return old
+        return {
+          ...old,
+          data: old.data.filter((p: any) => p.id !== id),
+        }
+      })
+      // Close the dialog immediately for an instant feel
+      setDeleteId(null)
+      return { previous }
+    },
+    onError: (err, id, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["products", page, query], context.previous)
+      }
+      toast.error("Failed to delete product")
+    },
     onSuccess: () => {
       toast.success("Product deleted")
-      queryClient.invalidateQueries({ queryKey: ["products"] })
-      setDeleteId(null)
     },
-    onError: () => toast.error("Failed to delete product"),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] })
+    },
   })
 
   const columns = [

@@ -50,11 +50,27 @@ export function CategoriesPage() {
 
   const deleteMutation = useMutation({
     mutationFn: deleteCategory,
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: ["categories"] })
+      const previous = queryClient.getQueryData(["categories"])
+      queryClient.setQueryData(["categories"], (old: any) => {
+        if (!Array.isArray(old)) return old
+        return old.filter((c: any) => c.id !== id)
+      })
+      return { previous }
+    },
+    onError: (err, id, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["categories"], context.previous)
+      }
+      toast.error("Failed to delete category")
+    },
     onSuccess: () => {
       toast.success("Category deleted")
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] })
     },
-    onError: () => toast.error("Failed to delete category"),
   })
 
   const openCreate = () => {
