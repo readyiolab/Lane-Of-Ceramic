@@ -1,0 +1,281 @@
+-- Base schema for Ceramic Studio (laneofceramic)
+CREATE DATABASE IF NOT EXISTS laneofceramic;
+USE laneofceramic;
+
+CREATE TABLE IF NOT EXISTS ec_users (
+  id CHAR(36) PRIMARY KEY,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  phone VARCHAR(20) UNIQUE,
+  fullName VARCHAR(150) NOT NULL,
+  passwordHash VARCHAR(255) NOT NULL,
+  role VARCHAR(30) NOT NULL DEFAULT 'USER',
+  isActive TINYINT(1) NOT NULL DEFAULT 1,
+  is_email_verified TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_users_role_active (role, isActive)
+);
+
+CREATE TABLE IF NOT EXISTS ec_categories (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  slug VARCHAR(140) NOT NULL UNIQUE,
+  parent_id BIGINT NULL,
+  description VARCHAR(500) NULL,
+  image VARCHAR(500) NULL,
+  subtitle VARCHAR(255) NULL,
+  hero_image VARCHAR(500) NULL,
+  hero_title VARCHAR(255) NULL,
+  display_order INT NOT NULL DEFAULT 0,
+  sort_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_categories_parent (parent_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_brands (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  slug VARCHAR(140) NOT NULL UNIQUE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL
+);
+
+CREATE TABLE IF NOT EXISTS ec_products (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  sku VARCHAR(80) NOT NULL UNIQUE,
+  name VARCHAR(180) NOT NULL,
+  slug VARCHAR(190) NOT NULL UNIQUE,
+  short_description VARCHAR(500) NULL,
+  long_description TEXT NULL,
+  material VARCHAR(150) NULL,
+  dimensions VARCHAR(150) NULL,
+  weight VARCHAR(80) NULL,
+  care_instructions JSON NULL,
+  features JSON NULL,
+  tags JSON NULL,
+  category_id BIGINT NOT NULL,
+  brand_id BIGINT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  sale_price DECIMAL(10,2) NULL,
+  rating DECIMAL(3,2) NOT NULL DEFAULT 0,
+  review_count INT NOT NULL DEFAULT 0,
+  is_featured TINYINT(1) NOT NULL DEFAULT 0,
+  is_trending TINYINT(1) NOT NULL DEFAULT 0,
+  featured_rank INT NOT NULL DEFAULT 999,
+  stock_count INT NOT NULL DEFAULT 0,
+  in_stock TINYINT(1) NOT NULL DEFAULT 1,
+  seo_title VARCHAR(190) NULL,
+  seo_description VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_products_category_stock (category_id, in_stock),
+  INDEX idx_products_featured (is_featured, featured_rank)
+);
+
+CREATE TABLE IF NOT EXISTS ec_product_images (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  product_id BIGINT NOT NULL,
+  url VARCHAR(500) NOT NULL,
+  is_primary TINYINT(1) NOT NULL DEFAULT 0,
+  position INT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_product_images (product_id, position)
+);
+
+CREATE TABLE IF NOT EXISTS ec_product_variants (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  product_id BIGINT NOT NULL,
+  sku VARCHAR(80) NOT NULL UNIQUE,
+  color VARCHAR(80) NULL,
+  size VARCHAR(80) NULL,
+  pack_size VARCHAR(80) NULL,
+  price_delta DECIMAL(10,2) NOT NULL DEFAULT 0,
+  stock_count INT NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_variants_product (product_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_inventory_logs (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  product_id BIGINT NOT NULL,
+  variant_id BIGINT NULL,
+  change_type VARCHAR(50) NOT NULL,
+  quantity INT NOT NULL,
+  reason VARCHAR(255) NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_inventory_product (product_id, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS ec_addresses (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id CHAR(36) NOT NULL,
+  fullName VARCHAR(150) NOT NULL,
+  mobile_number VARCHAR(20) NOT NULL,
+  email VARCHAR(190) NULL,
+  pincode VARCHAR(10) NOT NULL,
+  address_line_1 VARCHAR(255) NOT NULL,
+  address_line_2 VARCHAR(255) NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL DEFAULT 'India',
+  landmark VARCHAR(120) NULL,
+  address_type ENUM('HOME','WORK','OTHER') NOT NULL DEFAULT 'HOME',
+  is_default TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_addresses_user (user_id, is_default)
+);
+
+CREATE TABLE IF NOT EXISTS ec_carts (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id CHAR(36) NULL,
+  guest_token VARCHAR(120) NULL UNIQUE,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_carts_user (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_cart_items (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  cart_id BIGINT NOT NULL,
+  product_id BIGINT NOT NULL,
+  variant_id BIGINT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_cart_item (cart_id, product_id, variant_id),
+  INDEX idx_cart_items_cart (cart_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_orders (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_number VARCHAR(50) NOT NULL UNIQUE,
+  user_id CHAR(36) NOT NULL,
+  address_id BIGINT NOT NULL,
+  status ENUM('PENDING','PAID','PROCESSING','PACKED','SHIPPED','DELIVERED','CANCELLED','REFUNDED') NOT NULL DEFAULT 'PENDING',
+  subtotal DECIMAL(10,2) NOT NULL,
+  discount_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  shipping_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  tax_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  total_amount DECIMAL(10,2) NOT NULL,
+  coupon_id BIGINT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  deleted_at DATETIME NULL,
+  INDEX idx_orders_user (user_id, status, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS ec_order_items (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_id BIGINT NOT NULL,
+  product_id BIGINT NOT NULL,
+  variant_id BIGINT NULL,
+  quantity INT NOT NULL,
+  unit_price DECIMAL(10,2) NOT NULL,
+  line_total DECIMAL(10,2) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_order_items_order (order_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_payments (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_id BIGINT NOT NULL,
+  provider VARCHAR(30) NOT NULL DEFAULT 'CASHFREE',
+  provider_order_id VARCHAR(100) NULL,
+  provider_payment_id VARCHAR(100) NULL,
+  status ENUM('INITIATED','SUCCESS','FAILED','REFUNDED','PARTIAL_REFUNDED') NOT NULL DEFAULT 'INITIATED',
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(10) NOT NULL DEFAULT 'INR',
+  idempotency_key VARCHAR(120) NOT NULL UNIQUE,
+  payload JSON NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_payments_order (order_id, status)
+);
+
+CREATE TABLE IF NOT EXISTS ec_shipments (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_id BIGINT NOT NULL,
+  provider VARCHAR(30) NOT NULL DEFAULT 'SHIPROCKET',
+  provider_order_id VARCHAR(100) NULL,
+  awb_code VARCHAR(100) NULL,
+  tracking_url VARCHAR(500) NULL,
+  status ENUM('CREATED','PICKUP_BOOKED','IN_TRANSIT','DELIVERED','RTO','CANCELLED') NOT NULL DEFAULT 'CREATED',
+  payload JSON NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_shipments_order (order_id, status)
+);
+
+CREATE TABLE IF NOT EXISTS ec_coupons (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(50) NOT NULL UNIQUE,
+  discount_type VARCHAR(30) NOT NULL,
+  discount_value DECIMAL(10,2) NOT NULL,
+  min_order_value DECIMAL(10,2) NULL,
+  max_discount DECIMAL(10,2) NULL,
+  usage_limit INT NULL,
+  used_count INT NOT NULL DEFAULT 0,
+  is_first_order_only TINYINT(1) NOT NULL DEFAULT 0,
+  starts_at DATETIME NULL,
+  expires_at DATETIME NULL,
+  isActive TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_coupons_code (code, isActive)
+);
+
+CREATE TABLE IF NOT EXISTS ec_reviews (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  product_id BIGINT NOT NULL,
+  user_id CHAR(36) NOT NULL,
+  rating INT NOT NULL,
+  title VARCHAR(150) NULL,
+  comment TEXT NULL,
+  is_verified_purchase TINYINT(1) NOT NULL DEFAULT 0,
+  is_approved TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_reviews_product (product_id, rating)
+);
+
+CREATE TABLE IF NOT EXISTS ec_wishlist (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id CHAR(36) NOT NULL,
+  product_id BIGINT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_wishlist (user_id, product_id)
+);
+
+CREATE TABLE IF NOT EXISTS ec_notifications (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id CHAR(36) NOT NULL,
+  channel VARCHAR(30) NOT NULL,
+  template VARCHAR(120) NOT NULL,
+  payload JSON NOT NULL,
+  status VARCHAR(30) NOT NULL DEFAULT 'queued',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_notifications_user (user_id, channel, status)
+);
+
+CREATE TABLE IF NOT EXISTS ec_webhook_logs (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  provider VARCHAR(30) NOT NULL,
+  event VARCHAR(120) NOT NULL,
+  signature VARCHAR(255) NULL,
+  payload JSON NOT NULL,
+  processed TINYINT(1) NOT NULL DEFAULT 0,
+  received_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_webhook_provider (provider, event, processed)
+);
