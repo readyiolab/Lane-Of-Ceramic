@@ -482,6 +482,8 @@ export const productService = {
       position: input.position ?? 0,
     });
     await cacheInvalidatePattern("products:*");
+    await cacheInvalidatePattern(`product:${product.slug}`);
+    
     const img = await db.select("product_images", "*", "id = ?", [result.insertId]);
     return {
       id: Number(img!.id),
@@ -492,10 +494,12 @@ export const productService = {
   },
 
   async removeImage(productId: number, imageId: number) {
+    const product = await db.select("products", "slug", "id = ?", [productId]);
     const img = await db.select("product_images", "id", "id = ? AND product_id = ?", [imageId, productId]);
     if (!img) throw AppError.notFound("Image");
     await db.delete("product_images", "id = ?", [imageId]);
     await cacheInvalidatePattern("products:*");
+    if (product) await cacheInvalidatePattern(`product:${product.slug}`);
   },
 
   async addVariant(
