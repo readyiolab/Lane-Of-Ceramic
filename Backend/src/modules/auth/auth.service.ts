@@ -339,13 +339,14 @@ export const authService = {
    * Send OTP for email verification/login.
    */
   async sendEmailOTP(email: string) {
+    const normalizedEmail = email.trim().toLowerCase();
     const otp = generateOTP(6);
 
     // Store OTP in Redis (5 mins expiry)
-    await redis.set(`${CACHE_KEY.OTP}email:${email}`, otp, "EX", CACHE_TTL.OTP);
+    await redis.set(`${CACHE_KEY.OTP}email:${normalizedEmail}`, otp, "EX", CACHE_TTL.OTP);
 
     // Send OTP Email asynchronously
-    emailService.sendOtpEmail(email, otp).catch((err) => {
+    emailService.sendOtpEmail(normalizedEmail, otp).catch((err) => {
       log.error({ err, email }, "Failed to send OTP email");
     });
 
@@ -358,10 +359,11 @@ export const authService = {
    * Verify Email OTP and Login/Register.
    */
   async verifyEmailOTP(email: string, otp: string) {
-    const key = `${CACHE_KEY.OTP}email:${email}`;
+    const normalizedEmail = email.trim().toLowerCase();
+    const key = `${CACHE_KEY.OTP}email:${normalizedEmail}`;
     const stored = await redis.get(key);
 
-    if (!stored || stored !== otp) {
+    if (!stored || String(stored).trim() !== String(otp).trim()) {
       throw AppError.badRequest("Invalid or expired OTP");
     }
 
@@ -370,8 +372,8 @@ export const authService = {
 
     log.info({ email }, "Email OTP verified");
 
-    // Check if user exists
-    let user = await db.select("users", "*", "email = ?", [email]);
+    // Find or create user
+    let user = await db.select("users", "*", "email = ?", [normalizedEmail]);
 
     if (user && user.deleted_at) {
       throw AppError.unauthorized("Account is deactivated or deleted.");
@@ -385,7 +387,7 @@ export const authService = {
       const fullName = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ') || "User";
 
       const insertId = await db.insert("users", {
-        email,
+        email: normalizedEmail,
         passwordHash,
         fullName: fullName.trim(),
         role: "CUSTOMER",
