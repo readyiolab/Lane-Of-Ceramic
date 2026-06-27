@@ -7,11 +7,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole { USER ADMIN SUPER_ADMIN VENDOR }
-enum AddressType { HOME WORK OTHER }
-enum OrderStatus { PENDING PAID PROCESSING PACKED SHIPPED DELIVERED CANCELLED REFUNDED }
-enum PaymentStatus { INITIATED SUCCESS FAILED REFUNDED PARTIAL_REFUNDED }
-enum ShipmentStatus { CREATED PICKUP_BOOKED IN_TRANSIT DELIVERED RTO CANCELLED }
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+  VENDOR
+}
+
+enum AddressType {
+  HOME
+  WORK
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  PACKED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  INITIATED
+  SUCCESS
+  FAILED
+  REFUNDED
+  PARTIAL_REFUNDED
+}
+
+enum ShipmentStatus {
+  CREATED
+  PICKUP_BOOKED
+  IN_TRANSIT
+  DELIVERED
+  RTO
+  CANCELLED
+}
 
 model User {
   id              String   @id @default(uuid()) @db.Char(36)
