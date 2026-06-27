@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ShoppingBag, Search, Menu, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { motion, AnimatePresence } from "framer-motion";
 const LOGO_SRC = "/logo.webp";
 
 const NAV_LINKS = [
@@ -70,11 +71,11 @@ export default function Header() {
               )}
             </button>
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
+              onClick={() => setMobileOpen(true)}
               className="md:hidden text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
               data-testid="button-mobile-menu"
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              <Menu size={22} />
             </button>
           </div>
         </div>
@@ -92,23 +93,50 @@ export default function Header() {
         )}
       </div>
 
-      {mobileOpen && (
-        <div className="md:hidden bg-[#D6CBB7] border-t border-[#6B6A2A]/20 px-4 pb-4" data-testid="nav-mobile">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              onClick={() => setMobileOpen(false)}
-              className={`block py-3 text-sm font-medium border-b border-[#6B6A2A]/10 transition-colors ${
-                location === link.path ? "text-[#3E3A06]" : "text-[#6E6E6E] hover:text-[#3E3A06]"
-              }`}
-              data-testid={`link-mobile-${link.label.toLowerCase()}`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.3 }}
+            className="fixed inset-0 z-50 bg-[#D6CBB7] md:hidden flex flex-col"
+            data-testid="nav-mobile-fullscreen"
+          >
+            <div className="flex items-center justify-between p-4 sm:px-6 h-[4.25rem] border-b border-[#6B6A2A]/20">
+              <span className="text-xl font-medium tracking-wide text-[#3E3A06]">Menu</span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
+              >
+                <X size={28} />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col gap-6">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block text-2xl font-light tracking-wide transition-colors ${
+                    location === link.path ? "text-[#3E3A06] font-medium" : "text-[#6E6E6E] hover:text-[#3E3A06]"
+                  }`}
+                  data-testid={`link-mobile-${link.label.toLowerCase()}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            
+            <div className="p-6 border-t border-[#6B6A2A]/20">
+               <div className="text-sm text-[#6E6E6E]">
+                 &copy; {new Date().getFullYear()} Lane of Ceramic
+               </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
