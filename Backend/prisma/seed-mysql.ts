@@ -49,8 +49,8 @@ async function main() {
     const [rows] = await conn.query<any[]>("SELECT id FROM ec_categories WHERE slug = ?", [cat.slug]);
     if (rows.length === 0) {
       await conn.query(
-        "INSERT INTO ec_categories (name, slug, subtitle, sort_order, display_order, is_active) VALUES (?, ?, ?, ?, ?, 1)",
-        [cat.name, cat.slug, cat.subtitle, cat.sort, cat.sort],
+        "INSERT INTO ec_categories (name, slug, is_active) VALUES (?, ?, 1)",
+        [cat.name, cat.slug],
       );
     }
   }
