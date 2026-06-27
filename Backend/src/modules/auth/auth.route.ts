@@ -185,3 +185,33 @@ authRouter.post(
   validateBody(verifyOtpSchema),
   authController.verifyOTP,
 );
+
+/**
+ * @swagger
+ * /auth/send-email-otp:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Send OTP to email
+ *     responses:
+ *       200: { description: OTP sent }
+ */
+authRouter.post(
+  "/send-email-otp",
+  authRateLimiter,
+  authController.sendEmailOtp,
+);
+
+/**
+ * @swagger
+ * /auth/verify-email-otp:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Verify Email OTP and login
+ *     responses:
+ *       200: { description: OTP verified and logged in }
+ */
+authRouter.post(
+  "/verify-email-otp",
+  authRateLimiter,
+  authController.verifyEmailOtp,
+);

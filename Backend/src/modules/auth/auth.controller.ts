@@ -127,4 +127,29 @@ export const authController = {
       next(err);
     }
   },
+
+  async sendEmailOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await authService.sendEmailOTP(req.body.email);
+      ApiResponse.success(res, result);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async verifyEmailOtp(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await authService.verifyEmailOTP(req.body.email, req.body.otp);
+
+      res.cookie("refreshToken", result.refreshToken, REFRESH_COOKIE_OPTIONS);
+
+      ApiResponse.success(res, {
+        user: result.user,
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };

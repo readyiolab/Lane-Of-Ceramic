@@ -13,11 +13,11 @@ export default function CartDrawer() {
     totalItems, subtotal, currentTier, nextTier, toNextTier,
     discountAmount, shippingCost, finalTotal,
   } = useCart();
-  const { user } = useAuth();
+  const { user, openAuthSheet } = useAuth();
 
   const handleCheckout = () => {
     if (!user) {
-      setLocation("/auth?redirect=/checkout");
+      openAuthSheet();
       closeCart();
     } else {
       setLocation("/checkout");
@@ -243,10 +243,10 @@ export default function CartDrawer() {
               <button
                 onClick={() => {
                   closeCart();
-                  if (user) {
-                    setLocation("/checkout");
+                  if (!user) {
+                    openAuthSheet();
                   } else {
-                    setLocation("/login?redirect=/checkout");
+                    setLocation("/checkout");
                   }
                 }}
                 className="w-full py-3.5 bg-[#3E3A06] text-[#D6CBB7] font-semibold text-sm tracking-wide hover:bg-[#6B6A2A] transition-colors flex items-center justify-center gap-2"

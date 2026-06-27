@@ -16,9 +16,9 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const { totalItems, openCart } = useCart();
-  const { user } = useAuth();
+  const { user, openAuthSheet } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -61,13 +61,13 @@ export default function Header() {
             >
               <Search size={20} />
             </button>
-            <Link
-              href={user ? "/orders" : "/login"}
-              className="text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
+            <button
+              onClick={() => user ? setLocation("/orders") : openAuthSheet()}
+              className="text-[#3E3A06] hover:text-[#5C5609] transition-colors p-1"
               aria-label="Account"
             >
               <User size={20} />
-            </Link>
+            </button>
             <button
               onClick={openCart}
               className="relative text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"

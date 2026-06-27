@@ -22,3 +22,18 @@ export async function logout() {
     }
   });
 }
+
+export async function sendOtp(email: string) {
+  return apiFetch<any>("/auth/send-email-otp", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
+export async function verifyOtp(email: string, otp: string) {
+  return apiFetch<any>("/auth/verify-email-otp", {
+    method: "POST",
+    body: JSON.stringify({ email, otp }),
+  });
+}
+

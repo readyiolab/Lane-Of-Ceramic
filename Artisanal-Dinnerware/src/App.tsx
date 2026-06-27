@@ -3,14 +3,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { CartProvider } from "@/context/CartContext";
+import { CartProvider } from "./context/CartContext";
+import { AuthProvider } from "./context/AuthContext";
+import { AuthSheet } from "./components/auth/AuthSheet";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CookieConsent from "@/components/layout/CookieConsent";
-import { AuthProvider } from "@/context/AuthContext";
-import Home from "@/pages/Home";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
+import Orders from "./pages/Orders";
 
 // Lazy-loaded pages — only downloaded when the user navigates to them
 const Drinkware = lazy(() => import("@/pages/Drinkware"));
@@ -19,11 +26,7 @@ const Serveware = lazy(() => import("@/pages/Serveware"));
 const Kitchenware = lazy(() => import("@/pages/Kitchenware"));
 const About = lazy(() => import("@/pages/About"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
-const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const BundleBuilder = lazy(() => import("@/pages/BundleBuilder"));
-const Checkout = lazy(() => import("@/pages/Checkout"));
-const Login = lazy(() => import("@/pages/Login"));
-const Orders = lazy(() => import("@/pages/Orders"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const queryClient = new QueryClient();
@@ -39,21 +42,36 @@ function PageLoader() {
 function Router() {
   return (
     <Suspense fallback={<PageLoader />}>
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/product/:id" component={ProductDetail} />
-        <Route path="/bundles/:type" component={BundleBuilder} />
-        <Route path="/checkout" component={Checkout} />
-        <Route path="/drinkware" component={Drinkware} />
-        <Route path="/tableware" component={Tableware} />
-        <Route path="/serveware" component={Serveware} />
-        <Route path="/kitchenware" component={Kitchenware} />
-        <Route path="/about" component={About} />
-        <Route path="/privacy" component={PrivacyPolicy} />
-        <Route path="/login" component={Login} />
-        <Route path="/orders" component={Orders} />
-        <Route component={NotFound} />
-      </Switch>
+      <div className="flex min-h-screen flex-col bg-[#FAF9F6] font-sans selection:bg-[#E8E3D9] selection:text-[#3E3A06]">
+        <Header />
+        <main className="flex-1">
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/products" component={Products} />
+            <Route path="/product/:slug" component={ProductDetail} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/order-confirmation" component={OrderConfirmation} />
+            <Route path="/orders" component={Orders} />
+            <Route path="/bundles/:type" component={BundleBuilder} />
+            <Route path="/drinkware" component={Drinkware} />
+            <Route path="/tableware" component={Tableware} />
+            <Route path="/serveware" component={Serveware} />
+            <Route path="/kitchenware" component={Kitchenware} />
+            <Route path="/about" component={About} />
+            <Route path="/privacy" component={PrivacyPolicy} />
+            <Route>
+              <div className="flex min-h-[50vh] items-center justify-center">
+                <h1 className="font-serif text-3xl text-[#3E3A06]">
+                  404 - Page Not Found
+                </h1>
+              </div>
+            </Route>
+          </Switch>
+        </main>
+        <Footer />
+        <AuthSheet />
+      </div>
     </Suspense>
   );
 }
@@ -66,9 +84,7 @@ function App() {
           <CartProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <AnnouncementBar />
-            <Header />
             <Router />
-            <Footer />
             <CartDrawer />
             <CookieConsent />
           </WouterRouter>

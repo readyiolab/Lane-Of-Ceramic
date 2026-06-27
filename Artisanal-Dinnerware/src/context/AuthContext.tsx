@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { login as loginApi, register as registerApi, logout as logoutApi } from "@/api/auth";
+import { login as loginApi, register as registerApi, logout as logoutApi, sendOtp as sendOtpApi, verifyOtp as verifyOtpApi } from "@/api/auth";
 import { toast } from "sonner";
 
 interface User {
@@ -13,8 +13,13 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isAuthSheetOpen: boolean;
+  openAuthSheet: () => void;
+  closeAuthSheet: () => void;
   login: (email: string, password: string) => Promise<void>;
   register: (fullName: string, email: string, password: string, phone: string) => Promise<void>;
+  sendOtp: (email: string) => Promise<void>;
+  verifyOtp: (email: string, otp: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -23,6 +28,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthSheetOpen, setIsAuthSheetOpen] = useState(false);
+
+  const openAuthSheet = () => setIsAuthSheetOpen(true);
+  const closeAuthSheet = () => setIsAuthSheetOpen(false);
 
   useEffect(() => {
     // Check if user info is stored in localStorage
@@ -65,6 +74,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const sendOtp = async (email: string) => {
+    try {
+      await sendOtpApi(email);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send OTP");
+      throw err;
+    }
+  };
+
+  const verifyOtp = async (email: string, otp: string) => {
+    try {
+      const data = await verifyOtpApi(email, otp);
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to verify OTP");
+      throw err;
+    }
+  };
+
   const logout = async () => {
     try {
       await logoutApi();
@@ -78,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthSheetOpen, openAuthSheet, closeAuthSheet, login, register, sendOtp, verifyOtp, logout }}>
       {children}
     </AuthContext.Provider>
   );

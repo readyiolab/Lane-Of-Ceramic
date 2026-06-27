@@ -95,4 +95,23 @@ export const emailService = {
     `;
     await this.sendMail(to, `Order Confirmation - ${orderNumber}`, html);
   },
+
+  /**
+   * Send OTP Verification Email.
+   */
+  async sendOtpEmail(to: string, otp: string) {
+    const html = `
+      <div style="font-family: sans-serif; padding: 20px; color: #333;">
+        <h2>Your Verification Code</h2>
+        <p>Please use the following 6-digit code to complete your login:</p>
+        <div style="font-size: 24px; font-weight: bold; letter-spacing: 5px; padding: 15px; background-color: #f5f5f5; border-radius: 4px; display: inline-block; margin: 10px 0;">
+          ${otp}
+        </div>
+        <p>This code will expire in 5 minutes.</p>
+        <br/>
+        <p>Warm regards,<br/>The Ceramic Studio Team</p>
+      </div>
+    `;
+    await this.sendMail(to, "Login Verification Code", html);
+  },
 };

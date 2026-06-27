@@ -334,4 +334,99 @@ export const authService = {
     log.info({ phone: phone.slice(-4) }, "OTP verified");
     return true;
   },
+
+  /**
+   * Send OTP for email verification/login.
+   */
+  async sendEmailOTP(email: string) {
+    const otp = generateOTP(6);
+
+    // Store OTP in Redis (5 mins expiry)
+    await redis.set(`${CACHE_KEY.OTP}email:${email}`, otp, "EX", CACHE_TTL.OTP);
+
+    // Send OTP Email asynchronously
+    emailService.sendOtpEmail(email, otp).catch((err) => {
+      log.error({ err, email }, "Failed to send OTP email");
+    });
+
+    log.info({ email }, "Email OTP sent");
+
+    return { message: "OTP sent successfully" };
+  },
+
+  /**
+   * Verify Email OTP and Login/Register.
+   */
+  async verifyEmailOTP(email: string, otp: string) {
+    const key = `${CACHE_KEY.OTP}email:${email}`;
+    const stored = await redis.get(key);
+
+    if (!stored || stored !== otp) {
+      throw AppError.badRequest("Invalid or expired OTP");
+    }
+
+    // Delete OTP after verification
+    await redis.del(key);
+
+    log.info({ email }, "Email OTP verified");
+
+    // Check if user exists
+    let user = await db.select("users", "*", "email = ?", [email]);
+
+    if (user && user.deleted_at) {
+      throw AppError.unauthorized("Account is deactivated or deleted.");
+    }
+
+    // If user doesn't exist, create them
+    if (!user) {
+      const generatedPassword = generateUUID();
+      const passwordHash = await hashPassword(generatedPassword);
+      // Create full name from email prefix
+      const fullName = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ') || "User";
+
+      const insertId = await db.insert("users", {
+        email,
+        passwordHash,
+        fullName: fullName.trim(),
+        role: "CUSTOMER",
+        isActive: 1,
+        is_email_verified: 1,
+      });
+      user = await db.select("users", "*", "id = ?", [insertId]);
+    } else if (!user.is_email_verified) {
+      // Set to verified if they weren't before
+      await db.update("users", { is_email_verified: 1 }, "id = ?", [user.id]);
+    }
+
+    // Generate tokens
+    const accessToken = signAccessToken(user.id, user.role);
+    const refreshToken = signRefreshToken(user.id);
+
+    // Store session
+    await redis.set(
+      `${CACHE_KEY.SESSION}${user.id}:${refreshToken.slice(-8)}`,
+      JSON.stringify({
+        userId: user.id,
+        role: user.role,
+        createdAt: Date.now(),
+      }),
+      "EX",
+      CACHE_TTL.USER_SESSION,
+    );
+
+    log.info({ userId: user.id }, "User logged in via Email OTP");
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        phone: user.phone,
+        role: user.role,
+        isEmailVerified: true,
+      },
+      accessToken,
+      refreshToken,
+    };
+  },
 };
