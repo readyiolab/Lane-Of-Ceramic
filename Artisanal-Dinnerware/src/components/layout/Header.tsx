@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 const LOGO_SRC = "/logo.webp";
 
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [location] = useLocation();
   const { totalItems, openCart } = useCart();
+  const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -59,6 +61,13 @@ export default function Header() {
             >
               <Search size={20} />
             </button>
+            <Link
+              href={user ? "/orders" : "/login"}
+              className="text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
+              aria-label="Account"
+            >
+              <User size={20} />
+            </Link>
             <button
               onClick={openCart}
               className="relative text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"

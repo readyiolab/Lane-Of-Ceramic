@@ -14,6 +14,8 @@ import {
   FileText,
   LogOut,
 } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { getDashboardStats } from "@/api/endpoints"
 import { useAuth } from "@/auth/AuthContext"
 import { Button } from "@/components/ui/button"
 import {
@@ -55,6 +57,12 @@ export function AdminLayout() {
   const navigate = useNavigate()
   const { user, logout } = useAuth()
 
+  const { data: dashboard } = useQuery({
+    queryKey: ["dashboard-stats"],
+    queryFn: getDashboardStats,
+    refetchInterval: 30000 // refresh every 30 seconds
+  });
+
   const handleLogout = async () => {
     await logout()
     navigate("/login")
@@ -91,9 +99,16 @@ export function AdminLayout() {
                           isActive={isActive}
                           tooltip={item.title}
                         >
-                          <Link to={item.href}>
-                            <item.icon />
-                            <span>{item.title}</span>
+                          <Link to={item.href} className="flex justify-between items-center w-full">
+                            <div className="flex items-center gap-2">
+                              <item.icon />
+                              <span>{item.title}</span>
+                            </div>
+                            {item.href === "/orders" && dashboard?.pendingOrdersCount > 0 && (
+                              <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                                {dashboard.pendingOrdersCount}
+                              </span>
+                            )}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>

@@ -33,6 +33,7 @@ export interface User {
 export interface DashboardStats {
   revenue: number
   ordersCount: number
+  pendingOrdersCount?: number
   usersCount: number
   lowStockProducts: Array<{
     id: number

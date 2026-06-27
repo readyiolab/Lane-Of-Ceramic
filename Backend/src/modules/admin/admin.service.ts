@@ -18,6 +18,9 @@ export const adminService = {
     // 2. Total active users
     const totalUsers = await db.count("users", "isActive = true AND deleted_at IS NULL");
 
+    // 2b. Pending orders count
+    const pendingOrdersCount = await db.count("orders", "status = 'PENDING' AND deleted_at IS NULL");
+
     // 3. Products low on stock (less than 10 units)
     const lowStockProducts = await db.selectAll(
       "products",
@@ -96,6 +99,7 @@ export const adminService = {
     return {
       revenue: totalRevenue,
       ordersCount: totalOrders,
+      pendingOrdersCount: pendingOrdersCount,
       usersCount: totalUsers,
       lowStockProducts: formattedLowStock,
       topSellingProducts: topSellingDetails,

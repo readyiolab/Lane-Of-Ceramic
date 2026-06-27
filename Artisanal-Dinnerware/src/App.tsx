@@ -9,6 +9,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CartDrawer from "@/components/cart/CartDrawer";
 import CookieConsent from "@/components/layout/CookieConsent";
+import { AuthProvider } from "@/context/AuthContext";
 import Home from "@/pages/Home";
 
 // Lazy-loaded pages — only downloaded when the user navigates to them
@@ -21,6 +22,8 @@ const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const ProductDetail = lazy(() => import("@/pages/ProductDetail"));
 const BundleBuilder = lazy(() => import("@/pages/BundleBuilder"));
 const Checkout = lazy(() => import("@/pages/Checkout"));
+const Login = lazy(() => import("@/pages/Login"));
+const Orders = lazy(() => import("@/pages/Orders"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 const queryClient = new QueryClient();
@@ -47,6 +50,8 @@ function Router() {
         <Route path="/kitchenware" component={Kitchenware} />
         <Route path="/about" component={About} />
         <Route path="/privacy" component={PrivacyPolicy} />
+        <Route path="/login" component={Login} />
+        <Route path="/orders" component={Orders} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
@@ -57,7 +62,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CartProvider>
+        <AuthProvider>
+          <CartProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <AnnouncementBar />
             <Header />
@@ -67,7 +73,8 @@ function App() {
             <CookieConsent />
           </WouterRouter>
           <Toaster />
-        </CartProvider>
+          </CartProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

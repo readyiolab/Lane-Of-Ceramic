@@ -1,6 +1,7 @@
 import { X, Minus, Plus, ShoppingBag, Trash2, ArrowRight, Tag, Truck, Gift, Flame, Package } from "lucide-react";
 import { useLocation } from "wouter";
 import { useCart, DISCOUNT_TIERS } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { optimizeImage } from "@/lib/utils";
 
 const TIER_ICONS = [Package, Truck, Gift, Flame];
@@ -12,6 +13,17 @@ export default function CartDrawer() {
     totalItems, subtotal, currentTier, nextTier, toNextTier,
     discountAmount, shippingCost, finalTotal,
   } = useCart();
+  const { user } = useAuth();
+
+  const handleCheckout = () => {
+    if (!user) {
+      setLocation("/auth?redirect=/checkout");
+      closeCart();
+    } else {
+      setLocation("/checkout");
+      closeCart();
+    }
+  };
 
   const bundleSavingsTotal = items.reduce((sum, item) => {
     if (item.bundlePrice !== undefined) {
@@ -229,7 +241,14 @@ export default function CartDrawer() {
               </div>
 
               <button
-                onClick={() => { closeCart(); setLocation("/checkout"); }}
+                onClick={() => {
+                  closeCart();
+                  if (user) {
+                    setLocation("/checkout");
+                  } else {
+                    setLocation("/login?redirect=/checkout");
+                  }
+                }}
                 className="w-full py-3.5 bg-[#3E3A06] text-[#D6CBB7] font-semibold text-sm tracking-wide hover:bg-[#6B6A2A] transition-colors flex items-center justify-center gap-2"
                 data-testid="button-checkout"
               >
