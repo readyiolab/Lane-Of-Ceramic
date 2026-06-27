@@ -92,6 +92,21 @@ export async function deleteProduct(id: number) {
   await apiClient.delete(`/products/${id}`)
 }
 
+export async function addProductImage(
+  id: number,
+  payload: { url: string; isPrimary?: boolean; position?: number }
+) {
+  const { data } = await apiClient.post<ApiResponse<any>>(
+    `/products/${id}/images`,
+    payload
+  )
+  return data.data
+}
+
+export async function deleteProductImage(id: number, imageId: number) {
+  await apiClient.delete(`/products/${id}/images/${imageId}`)
+}
+
 // ── Categories ────────────────────────────────────────────────
 
 export async function getCategories() {

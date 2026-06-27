@@ -11,7 +11,9 @@ import {
   getCategories,
   getProductBySlug,
   updateProduct,
+  addProductImage,
 } from "@/api/endpoints"
+import { ImageGallery } from "@/components/ImageGallery"
 import { LoadingState } from "@/components/LoadingState"
 import { PageHeader } from "@/components/PageHeader"
 import { Button } from "@/components/ui/button"
@@ -53,6 +55,7 @@ export function ProductFormPage() {
   const isEdit = slug !== "new"
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const [localImages, setLocalImages] = useState<string[]>([])
 
   const { data: product, isLoading: loadingProduct } = useQuery({
     queryKey: ["product", slug],
@@ -110,15 +113,24 @@ export function ProductFormPage() {
   }, [product, reset])
 
   const mutation = useMutation({
-    mutationFn: (values: ProductFormValues) => {
+    mutationFn: async (values: ProductFormValues) => {
       const payload = {
         ...values,
         brandId: values.brandId || undefined,
         salePrice: values.salePrice || undefined,
       }
-      return isEdit && product
-        ? updateProduct(product.id, payload)
-        : createProduct(payload)
+      const res = isEdit && product
+        ? await updateProduct(product.id, payload)
+        : await createProduct(payload)
+
+      if (!isEdit && localImages.length > 0 && res.id) {
+        await Promise.all(
+          localImages.map((url, i) => 
+            addProductImage(res.id, { url, isPrimary: i === 0 })
+          )
+        )
+      }
+      return res
     },
     onSuccess: () => {
       toast.success(isEdit ? "Product updated" : "Product created")
@@ -173,6 +185,13 @@ export function ProductFormPage() {
             <Textarea rows={2} {...register("shortDescription")} />
           </FieldContent>
         </Field>
+
+        <ImageGallery 
+          productId={isEdit ? product?.id : undefined}
+          images={product?.images || []}
+          localImages={localImages}
+          onImagesChange={setLocalImages}
+        />
 
         <Field>
           <FieldLabel>Long Description</FieldLabel>

@@ -96,6 +96,7 @@ export interface Category {
   parentId?: number | null
   description?: string | null
   image?: string | null
+  heroImage?: string | null
   subtitle?: string | null
   displayOrder?: number
   sortOrder?: number

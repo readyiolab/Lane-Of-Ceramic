@@ -10,6 +10,7 @@ import {
 } from "@/api/endpoints"
 import { DataTable } from "@/components/DataTable"
 import { PageHeader } from "@/components/PageHeader"
+import { SingleImageUploader } from "@/components/SingleImageUploader"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -25,7 +26,7 @@ import type { Category } from "@/types/api"
 export function CategoriesPage() {
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<Category | null>(null)
-  const [form, setForm] = useState({ name: "", description: "", sortOrder: 0 })
+  const [form, setForm] = useState({ name: "", description: "", sortOrder: 0, image: null as string | null, heroImage: null as string | null })
   const queryClient = useQueryClient()
 
   const { data = [], isLoading } = useQuery({
@@ -58,7 +59,7 @@ export function CategoriesPage() {
 
   const openCreate = () => {
     setEditing(null)
-    setForm({ name: "", description: "", sortOrder: 0 })
+    setForm({ name: "", description: "", sortOrder: 0, image: null, heroImage: null })
     setOpen(true)
   }
 
@@ -68,6 +69,8 @@ export function CategoriesPage() {
       name: cat.name,
       description: cat.description ?? "",
       sortOrder: cat.sortOrder ?? 0,
+      image: cat.image ?? null,
+      heroImage: cat.heroImage ?? null,
     })
     setOpen(true)
   }
@@ -157,6 +160,24 @@ export function CategoriesPage() {
                 />
               </FieldContent>
             </Field>
+            
+            <div className="grid grid-cols-2 gap-4">
+              <SingleImageUploader
+                label="Thumbnail Image"
+                value={form.image}
+                onChange={(url) => setForm({ ...form, image: url })}
+                onRemove={() => setForm({ ...form, image: null })}
+                folder="categories"
+              />
+              <SingleImageUploader
+                label="Hero Image"
+                value={form.heroImage}
+                onChange={(url) => setForm({ ...form, heroImage: url })}
+                onRemove={() => setForm({ ...form, heroImage: null })}
+                folder="categories"
+              />
+            </div>
+            
             <Button
               className="w-full"
               onClick={() => saveMutation.mutate()}
