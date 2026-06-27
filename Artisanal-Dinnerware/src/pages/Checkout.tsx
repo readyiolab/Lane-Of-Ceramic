@@ -6,6 +6,8 @@ import {
   CheckCircle2, Copy, ChevronDown, ChevronUp,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { createAddress, AddressPayload } from "@/api/addresses";
+import { createOrder } from "@/api/orders";
 
 const STATES = [
   "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -207,10 +209,11 @@ export default function Checkout() {
   });
   const [payment, setPayment] = useState("upi");
   const [upiId, setUpiId] = useState("");
-  const [orderId] = useState(generateOrderId);
+  const [orderId, setOrderId] = useState("");
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [errors, setErrors] = useState<Partial<Record<keyof Address, string>>>({});
   const [copying, setCopying] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   if (items.length === 0 && step !== 3) {
     return (
@@ -241,8 +244,48 @@ export default function Checkout() {
     if (validateAddress()) setStep(2);
   }
 
-  function handlePlaceOrder() {
-    setStep(3);
+  async function handlePlaceOrder() {
+    if (!validateAddress()) {
+      setStep(1);
+      return;
+    }
+    
+    setIsPlacingOrder(true);
+    try {
+      // 1. Create Address
+      const addressPayload: AddressPayload = {
+        fullName: address.fullName,
+        mobileNumber: address.phone,
+        email: address.email || undefined,
+        pincode: address.pincode,
+        addressLine1: address.addressLine1,
+        addressLine2: address.addressLine2,
+        city: address.city,
+        state: address.state,
+        addressType: address.type.toUpperCase() as "HOME" | "WORK" | "OTHER",
+      };
+
+      const addressRes = await createAddress(addressPayload);
+      
+      // 2. Create Order
+      // For now we map any payment method to COD if it's COD, otherwise ONLINE
+      const paymentMethod = payment === "cod" ? "COD" : "ONLINE";
+      
+      const orderRes = await createOrder({
+        addressId: addressRes.id,
+        paymentMethod,
+      });
+
+      // 3. Complete
+      setOrderId((orderRes as any).order_number || orderRes.orderId || "SUCCESS");
+      clearCart();
+      setStep(3);
+    } catch (err) {
+      console.error("Failed to place order:", err);
+      alert("Failed to place order. Please try again.");
+    } finally {
+      setIsPlacingOrder(false);
+    }
   }
 
   function handleCopyOrderId() {
@@ -550,11 +593,18 @@ export default function Checkout() {
 
                     <button
                       onClick={handlePlaceOrder}
-                      className="mt-4 w-full py-4 bg-[#3E3A06] text-[#D6CBB7] font-bold text-sm tracking-wide hover:bg-[#6B6A2A] transition-colors flex items-center justify-center gap-2"
+                      disabled={isPlacingOrder}
+                      className="mt-4 w-full py-4 bg-[#3E3A06] text-[#D6CBB7] font-bold text-sm tracking-wide hover:bg-[#6B6A2A] transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
                       data-testid="button-place-order"
                     >
-                      <Package size={16} />
-                      Place Order · ₹{(finalTotal + (payment === "cod" ? 50 : 0)).toLocaleString("en-IN")}
+                      {isPlacingOrder ? (
+                        <span>Processing...</span>
+                      ) : (
+                        <>
+                          <Package size={16} />
+                          Place Order · ₹{(finalTotal + (payment === "cod" ? 50 : 0)).toLocaleString("en-IN")}
+                        </>
+                      )}
                     </button>
                     <p className="text-center text-xs text-[#6E6E6E] mt-3">
                       By placing your order, you agree to our{" "}
