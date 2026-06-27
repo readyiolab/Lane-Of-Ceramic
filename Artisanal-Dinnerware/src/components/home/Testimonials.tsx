@@ -120,6 +120,7 @@ export default function Testimonials() {
               onClick={prev}
               className="w-10 h-10 border-2 border-[#3E3A06]/30 flex items-center justify-center text-[#3E3A06] hover:bg-[#3E3A06] hover:text-[#D6CBB7] hover:border-[#3E3A06] transition-all"
               data-testid="button-testimonial-prev"
+              aria-label="Previous testimonial"
             >
               <ChevronLeft size={18} />
             </button>
@@ -127,6 +128,7 @@ export default function Testimonials() {
               onClick={advance}
               className="w-10 h-10 border-2 border-[#3E3A06] bg-[#3E3A06] flex items-center justify-center text-[#D6CBB7] hover:bg-[#6B6A2A] transition-all"
               data-testid="button-testimonial-next"
+              aria-label="Next testimonial"
             >
               <ChevronRight size={18} />
             </button>
@@ -184,6 +186,7 @@ export default function Testimonials() {
                   : "w-2 h-2 bg-[#3E3A06]/25 hover:bg-[#3E3A06]/50"
               }`}
               data-testid={`dot-testimonial-${i}`}
+              aria-label={`Go to testimonial slide ${i + 1}`}
             />
           ))}
         </div>

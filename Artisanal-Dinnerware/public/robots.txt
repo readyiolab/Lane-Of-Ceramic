@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://laneofceramic.com/sitemap.xml
+
+# Block admin and API paths from crawlers
+Disallow: /api/

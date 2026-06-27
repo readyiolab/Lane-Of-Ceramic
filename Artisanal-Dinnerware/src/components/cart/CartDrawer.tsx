@@ -49,7 +49,7 @@ export default function CartDrawer() {
               Cart ({totalItems} {totalItems === 1 ? "item" : "items"})
             </h2>
           </div>
-          <button onClick={closeCart} className="opacity-70 hover:opacity-100 transition-opacity" data-testid="button-close-cart">
+          <button onClick={closeCart} className="opacity-70 hover:opacity-100 transition-opacity" data-testid="button-close-cart" aria-label="Close cart">
             <X size={20} />
           </button>
         </div>

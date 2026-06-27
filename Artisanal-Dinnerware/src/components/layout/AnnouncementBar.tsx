@@ -17,6 +17,7 @@ export default function AnnouncementBar() {
           onClick={() => setCurrent((c) => (c - 1 + texts.length) % texts.length)}
           className="opacity-60 hover:opacity-100 transition-opacity"
           data-testid="button-announcement-prev"
+          aria-label="Previous announcement"
         >
           <ChevronLeft size={14} />
         </button>
@@ -25,6 +26,7 @@ export default function AnnouncementBar() {
           onClick={() => setCurrent((c) => (c + 1) % texts.length)}
           className="opacity-60 hover:opacity-100 transition-opacity"
           data-testid="button-announcement-next"
+          aria-label="Next announcement"
         >
           <ChevronRight size={14} />
         </button>
@@ -33,6 +35,7 @@ export default function AnnouncementBar() {
         onClick={() => setVisible(false)}
         className="absolute right-4 top-1/2 -translate-y-1/2 opacity-60 hover:opacity-100 transition-opacity"
         data-testid="button-close-announcement"
+        aria-label="Close announcement bar"
       >
         <X size={14} />
       </button>

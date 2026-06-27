@@ -55,6 +55,7 @@ export default function Header() {
               onClick={() => setSearchOpen(!searchOpen)}
               className="text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
               data-testid="button-search"
+              aria-label="Search products"
             >
               <Search size={20} />
             </button>
@@ -62,6 +63,7 @@ export default function Header() {
               onClick={openCart}
               className="relative text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
               data-testid="button-cart"
+              aria-label="Open cart"
             >
               <ShoppingBag size={20} />
               {totalItems > 0 && (
@@ -74,6 +76,7 @@ export default function Header() {
               onClick={() => setMobileOpen(true)}
               className="md:hidden text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
               data-testid="button-mobile-menu"
+              aria-label="Open navigation menu"
             >
               <Menu size={22} />
             </button>
@@ -108,6 +111,7 @@ export default function Header() {
               <button
                 onClick={() => setMobileOpen(false)}
                 className="text-[#3E3A06] hover:text-[#6B6A2A] transition-colors p-1"
+                aria-label="Close navigation menu"
               >
                 <X size={28} />
               </button>

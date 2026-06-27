@@ -115,6 +115,7 @@ export default function HeroBanner() {
         onClick={prev}
         className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#D6CBB7]/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#D6CBB7]/40 transition-all"
         data-testid="button-banner-prev"
+        aria-label="Previous slide"
       >
         <ChevronLeft size={20} />
       </button>
@@ -122,6 +123,7 @@ export default function HeroBanner() {
         onClick={next}
         className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#D6CBB7]/20 backdrop-blur-sm border border-white/20 text-white flex items-center justify-center hover:bg-[#D6CBB7]/40 transition-all"
         data-testid="button-banner-next"
+        aria-label="Next slide"
       >
         <ChevronRight size={20} />
       </button>
@@ -135,6 +137,7 @@ export default function HeroBanner() {
               i === current ? "w-6 h-2 bg-[#D6CBB7]" : "w-2 h-2 bg-[#D6CBB7]/40"
             }`}
             data-testid={`button-banner-dot-${i}`}
+            aria-label={`Go to slide ${i + 1}`}
           />
         ))}
       </div>
